@@ -1,0 +1,86 @@
+﻿@implements IDisposable
+@inject IToastService _toastService
+
+
+@foreach (var positionToasts in ToastsByPosition)
+{
+    <ToastContainer @key="positionToasts.Key"        
+         class="@($"{ContainerCss} {positionToasts.Key}")"
+         @onmouseover="Enter"
+         @onmouseout="Leave"
+         OnFirstRender="ContainerRendered">
+
+        @foreach (var toast in positionToasts.Value)
+        {
+            <Toast @key="toast"
+               ToastReference="@toast"
+               Defaults="@ToastService.ToastDefaults"
+               Closed="Invalidate"
+               Css="@ToastCss"
+               HeaderCss="@ToastHeaderCss"
+               IconCss="@ToastIconCss"
+               CloseButtonCss="@ToastCloseButtonCss"
+               BodyCss="@ToastBodyCss" 
+               ChildContent="ChildContent!" />
+        }
+    </ToastContainer>
+}
+
+
+
+@code {
+
+    Dictionary<string, List<ToastReference>>? _toastsByPosition;
+    Dictionary<string, List<ToastReference>> ToastsByPosition =>
+        _toastsByPosition ??= ToastService.ActiveToasts
+            .GroupBy(t => t.Options.Position ?? "")
+            .ToDictionary(group => group.Key, group => group.ToList());
+
+    IEnumerable<ToastReference> VisibleToasts => ToastsByPosition.SelectMany(t => t.Value);
+
+    ToastService ToastService => (ToastService)_toastService;
+
+    [Parameter] public string ToastCss { get; set; } = "toast show";
+    [Parameter] public string ToastHeaderCss { get; set; } = "toast-header";
+    [Parameter] public string ToastIconCss { get; set; } = "toast-icon me-2";
+    [Parameter] public string ToastCloseButtonCss { get; set; } = "btn-close ms-auto align-self-start";
+    [Parameter] public string ToastBodyCss { get; set; } = "toast-body d-flex align-items-center";
+    [Parameter] public string ContainerCss { get; set; } = "toast-container position-fixed p-3";
+    [Parameter] public EventCallback<ElementReference> ContainerRendered { get; set; }
+
+    [Parameter] public RenderFragment<ToastReference>? ChildContent { get; set; }
+
+    protected override void OnInitialized()
+    {
+        ToastService.Showing += ToastService_Showing;
+    }
+
+    void IDisposable.Dispose()
+    {
+        ToastService.Showing -= ToastService_Showing;
+    }
+
+
+    async void ToastService_Showing(ToastReference toastReference)
+    {
+        await InvokeAsync(() =>
+        {
+            Invalidate();
+            StateHasChanged();
+        });
+    }
+
+    void Invalidate()
+    {
+        _toastsByPosition = null;
+    }
+
+    void Enter()
+    {
+        ToastService.Pause();
+    }
+    void Leave()
+    {
+        ToastService.Resume();
+    }
+}
