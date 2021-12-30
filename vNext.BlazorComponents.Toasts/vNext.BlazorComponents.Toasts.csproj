@@ -25,11 +25,6 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Content Remove="Typescript\tsconfig.json" />
-    <None Include="Typescript\tsconfig.json" CopyToOutputDirectory="Never" />
-  </ItemGroup>
   
   <ItemGroup>
     <SupportedPlatform Include="browser" />
@@ -49,4 +44,12 @@
     <None Include="..\README.md" Pack="True" PackagePath="/" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Content Update="Typescript\tsconfig.json" CopyToOutputDirectory="false" Pack="false" />
+  </ItemGroup>
 </Project>
