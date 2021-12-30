@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Version>0.5.0</Version>
     <Authors>Liero; Daniel Turan</Authors>
     <Company>vNext Software Consulting</Company>

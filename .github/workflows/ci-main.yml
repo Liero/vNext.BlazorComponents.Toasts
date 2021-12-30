@@ -28,10 +28,6 @@ jobs:
       with:
         dotnet-version: ${{ env.NETCORE_VERSION }}
 
-    #- name: Restore tools
-    #  run: dotnet tool restore      
-    #  working-directory: BlazorComponents
-
     - name: Restore dependencies
       run: dotnet restore
       
@@ -46,8 +42,8 @@ jobs:
       with:
         name: nugetpackage
         path: |
-            vNext.BlazorComponents.Toasts/bin/release/*.nupkg
-            vNext.BlazorComponents.Toasts/bin/release/*.snupkg
+            vNext.BlazorComponents.*/bin/release/*.nupkg
+            vNext.BlazorComponents.*/bin/release/*.snupkg
 
   deploy:
     needs: build
