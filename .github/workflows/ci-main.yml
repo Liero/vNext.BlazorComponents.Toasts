@@ -42,8 +42,8 @@ jobs:
       with:
         name: nugetpackage
         path: |
-            vNext.BlazorComponents.*/bin/release/*.nupkg
-            vNext.BlazorComponents.*/bin/release/*.snupkg
+            **/vNext.BlazorComponents.*.nupkg
+            **/vNext.BlazorComponents.*.snupkg
 
   deploy:
     needs: build
