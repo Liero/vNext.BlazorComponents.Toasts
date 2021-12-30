@@ -1,0 +1,84 @@
+﻿@using vNext.BlazorComponents.Toasts
+@using vNext.BlazorComponents.Toasts.Components
+@page "/animations"
+
+<ToastsHost 
+    ToastCss="@ToastCss" 
+    ContainerRendered="AddToastAnimations" />
+
+
+<div class="container d-flex flex-column gap-3">
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" id="fadein" @bind="fadeIn">
+      <label class="form-check-label" for="fadein">Fade In: @fadeIn</label>
+    </div>
+
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" id="fluidlayout" checked="@fluidLayout" @onchange="SetFluidLayout">
+      <label class="form-check-label" for="fluidlayout">Fluid layout: @fluidLayout</label>
+    </div>
+
+    <div>
+        <div class="btn btn-outline-info" @onclick="@(() => Open("info"))">Info</div>
+        <div class="btn btn-outline-success" @onclick="@(() => Open("success"))">Success</div>
+        <div class="btn btn-outline-warning" @onclick="@(() => Open("warning"))">Warning</div>
+        <div class="btn btn-outline-danger" @onclick="@(() => Open("error"))">Error</div>
+    </div>
+</div>
+@code {
+    [Inject] IJSRuntime JS { get; set; } = default!;
+    [Inject] IToastService Toasts { get; set; } = default!;
+
+    int counter;
+
+    bool fadeIn = true;
+    bool fluidLayout = true;
+
+    string ToastCss => $"toast show {(fadeIn ? " fadein" : "")}";
+
+    void SetFluidLayout(ChangeEventArgs args)
+    {
+        fluidLayout = (bool)args.Value!;
+        foreach(var toast in Toasts.ActiveToasts.ToArray())
+        {
+            toast.Close();
+        }
+    }
+
+    void Open(string severity)
+    {
+        string themeColor = severity switch
+        {
+            "error" => "danger",
+            _ => severity
+        };
+
+        var Icon = severity switch
+        {
+            "info" => "bi bi-info-circle-fill",
+            "success" => "bi bi-hand-thumbs-up-fill",
+            "warning" => "bi bi-exclamation-triangle-fill",
+            "error" => "bi bi-bug-fill",
+            _ => throw new NotImplementedException()    
+        };
+        Icon += $" text-{themeColor}";
+
+        Toasts.Show(new()
+        {
+            Title = severity.ToUpper(),
+            Message = $"Lorem ipsum dolor sit amet ({++counter})",
+            Icon = Icon,
+            Css = $"border-{themeColor}",
+            Position = "top-0 end-0"
+        });
+    }
+
+    async void AddToastAnimations(ElementReference toastContainer)
+    {
+        if (fluidLayout)
+        {
+            await JS.InvokeVoidAsync("vNext.BlazorComponents.Toasts.addToastAnimations", toastContainer);
+        }
+    }
+
+}

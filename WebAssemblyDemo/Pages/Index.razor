@@ -1,0 +1,203 @@
+﻿@using vNext.BlazorComponents.Toasts
+@using vNext.BlazorComponents.Toasts.Components
+@page "/"
+
+<ToastsHost />
+
+<div class="container d-flex flex-column gap-3">
+    <div>
+        <div class="btn btn-outline-info" @onclick="@(() => Open("info"))">Info</div>
+        <div class="btn btn-outline-success" @onclick="@(() => Open("success"))">Success</div>
+        <div class="btn btn-outline-warning" @onclick="@(() => Open("warning"))">Warning</div>
+        <div class="btn btn-outline-danger" @onclick="@(() => Open("error"))">Error</div>
+    </div>
+    <div>
+        <div class="btn btn-info" @onclick="@(() => Open("info", true))">Info</div>
+        <div class="btn btn-success" @onclick="@(() => Open("success", true))">Success</div>
+        <div class="btn btn-warning" @onclick="@(() => Open("warning", true))">Warning</div>
+        <div class="btn btn-danger" @onclick="@(() => Open("error", true))">Error</div>
+    </div>
+
+    <div class="form-floating">
+        <input id="Title" class="form-control" @bind="Title" placeholder="Title" />
+        <label for="Title">Title</label>
+    </div>
+
+    <div class="form-floating">
+        <input id="Message" class="form-control" @bind="Message" placeholder="Message" />
+        <label for="Message">Message</label>
+    </div>
+
+    <div class="input-group">
+        <div class="form-floating flex-grow-1">
+            <input id="icon" type="text" class="form-control" @bind="Icon" placeholder="Icon">
+            <label for="icon">Icon</label>
+        </div>
+
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><small class="dropdown-item-text">Open Iconic</small></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => Icon = "oi oi-thumb-up")">thumb-up</button></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => Icon = "oi oi-info")">info</button></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => Icon = "oi oi-warning")">warning</button></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => Icon = "oi oi-ban")">ban</button></li>
+
+            <li><hr class="dropdown-divider"></li>
+            <li><small class="dropdown-item-text">Bootstrap Icons</small></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => Icon = "bi bi-hand-thumbs-up-fill")">hand-thumbs-up-fill</button></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => Icon = "bi bi-hand-thumbs-up")">hand-thumbs-up</button></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => Icon = "bi bi-info-lg")">info-lg</button></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => Icon = "bi exclamation-octagon")">exclamation-octagon</button></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => Icon = "bi bi-bug-fill")">bug-fill</button></li>
+
+            <li><hr class="dropdown-divider"></li>
+            <li><small class="dropdown-item-text">Font awesome</small></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => Icon = "far fa-thumbs-up")">thumbs-up</button></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => Icon = "far fa-info")">info</button></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => Icon = "far exclamation-triangle")">exclamation-triangle</button></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => Icon = "far fa-angry")">angry</button></li>
+
+        </ul>
+    </div>
+
+    <div class="input-group">
+        <div class="form-floating flex-grow-1">
+            <input id="ToastCss" type="text" class="form-control" @bind="ToastCss" placeholder="Icon">
+            <label for="ToastCss">Toast Css</label>
+        </div>
+
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><button type="button" class="dropdown-item" @onclick="@(() => ToastCss ="")">Default</button></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => ToastCss ="border-primary")">border-primary</button></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => ToastCss ="border-success")">border-success</button></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => ToastCss ="border-warning")">border-warning</button></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => ToastCss ="border-danger")">border-danger</button></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => ToastCss ="border-info")">border-info</button></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => ToastCss ="text-white bg-primary")">text-white bg-primary</button></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => ToastCss ="text-white bg-success")">text-white bg-success</button></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => ToastCss ="text-white bg-warning")">text-white bg-warning</button></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => ToastCss ="text-white bg-danger")">text-white bg-danger</button></li>
+            <li><button type="button" class="dropdown-item" @onclick="@(() => ToastCss ="text-white bg-info")">text-white bg-info</button></li>
+        </ul>
+    </div>
+
+
+    <div class="form-floating">
+        <select id="Position" class="form-select" @bind="Position">
+            <option value="">Select a position...</option>
+            <option value="top-0 start-0">Top left</option>
+            <option value="top-0 start-50 translate-middle-x">Top center</option>
+            <option value="top-0 end-0">Top right</option>
+            <option value="top-50 start-0 translate-middle-y">Middle left</option>
+            <option value="top-50 start-50 translate-middle">Middle center</option>
+            <option value="top-50 end-0 translate-middle-y">Middle right</option>
+            <option value="bottom-0 start-0">Bottom left</option>
+            <option value="bottom-0 start-50 translate-middle-x">Bottom center</option>
+            <option value="bottom-0 end-0">Bottom right</option>
+            <option disabled>---------------</option>
+            <option value="top-0 end-0 toast-container-reverse">Top right - newest on top</option>
+            <option value="bottom-0 end-0 toast-container-reverse">Bottom right - newest on top</option>
+        </select>
+        <label for="Position">Position</label>
+    </div>
+
+
+    <div class="form-floating">
+        <input id="Timeout" class="form-control" @bind="Timeout" placeholder="Timeout" />
+        <label for="Timeout">Timeout</label>
+        <small class="form-text text-muted">
+            Zero for no timeout
+        </small>
+    </div>
+
+    <div class="my-3">
+        <div class="btn btn-primary" @onclick="Open">Open</div>
+        <div class="btn btn-secondary" @onclick="Close">Close</div>
+    </div>
+
+
+    <pre>
+        @foreach (var log in Logs)
+        {
+            <text>@log</text>
+        }
+    </pre>
+</div>
+@code {
+    [Inject] IToastService Toasts { get; set; } = default!;
+
+
+    string Title = "";
+    string Icon = "";
+    string Position = "";
+    string Message = "This is a message";
+    string ToastCss = "";
+
+    TimeSpan Timeout = TimeSpan.FromSeconds(5);
+
+    List<string> Logs = new();
+
+    int i;
+
+    void Open(string severity, bool fillBackgroud = false)
+    {
+        string themeColor = severity switch
+        {
+            "error" => "danger",
+            _ => severity
+        };
+        ToastCss = fillBackgroud ? $"bg-{themeColor} text-white" : $"border-{themeColor}";
+
+        Icon = severity switch
+        {
+            "info" => "bi bi-info-circle-fill",
+            "success" => "bi bi-hand-thumbs-up-fill",
+            "warning" => "bi bi-exclamation-triangle-fill",
+            "error" => "bi bi-bug-fill",
+            _ => throw new NotImplementedException()
+        };
+        if (!fillBackgroud)
+        {
+            Icon += $" text-{themeColor}";
+        }
+        Open();
+    }
+
+
+    void Open()
+    {
+        var toastReference = Toasts.Show(new()
+            {
+                Message = Message + $" ({++i})",
+                Title = Title,
+                Icon = Icon,
+                Position = string.IsNullOrEmpty(Position) ? null : Position,
+                Timeout = Timeout,
+                Css = ToastCss,
+            });
+
+        toastReference.Click += toast =>
+        {
+            Logs.Add($"CLICKED: {toast.Options.Message}\n");
+            StateHasChanged();
+
+            toast.Options.Message = "Done!";
+            toastReference.Update();
+        };
+        toastReference.Closed += toast =>
+        {
+            Logs.Add($"CLOSED: {toast.Options.Message}\n");
+            InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        };
+    }
+
+
+    void Close()
+    {
+        Toasts.ActiveToasts.FirstOrDefault()?.Close();
+    }
+}

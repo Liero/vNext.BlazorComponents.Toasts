@@ -1,0 +1,102 @@
+﻿@implements IDisposable
+<div class="@Css @ToastReference.Options.Css" role="alert" @onclick="ToastReference.OnClick">
+    <CascadingValue Value="ToastReference">
+        @if (ToastReference.Options.Template != null)
+        {
+            @ToastReference.Options.Template(ToastReference)
+        }
+        else if (ChildContent != null)
+        {
+            @ChildContent(ToastReference)
+        }
+        else
+        {
+            bool hasTitle = !string.IsNullOrWhiteSpace(ToastReference.Options.Title) || ToastReference.Options.Header != Defaults.Header;
+            bool canClose = ToastReference.Options.ShowCloseButton.GetValueOrDefault(true);
+            bool hasIcon = !string.IsNullOrEmpty(ToastReference.Options.Icon);
+
+            if (hasTitle)
+            {
+                <div class="@HeaderCss">
+                    @if (hasIcon)
+                    {
+                        <span class="@IconCss @ToastReference.Options.Icon"></span>
+                    }
+                    @ToastReference.Options.Header?.Invoke(ToastReference)
+
+                    @if (canClose)
+                    {
+                        <button type="button" class="@CloseButtonCss" aria-label="Close" @onclick="ToastReference.Close" @onclick:stopPropagation="true"></button>
+                    }
+                </div>
+            }
+            <div class="@BodyCss">
+                @if (hasIcon && !hasTitle)
+                {
+                    <span class="@IconCss @ToastReference.Options.Icon"></span>
+                }
+                <span class="toast-message">@ToastReference.Options.Body?.Invoke(ToastReference)</span>
+                @if (canClose && !hasTitle)
+                {
+                    <button type="button" class="@CloseButtonCss" aria-label="Close" @onclick="ToastReference.Close" @onclick:stopPropagation="true"></button>
+                }
+            </div>
+        }
+    </CascadingValue>
+</div>
+
+@code {
+
+    [EditorRequired, Parameter] public ToastReference ToastReference { get; set; } = default!;
+    [EditorRequired, Parameter] public ToastOptions Defaults { get; set; } = default!;
+    [Parameter] public string? Css { get; set; }
+    [Parameter] public string? HeaderCss { get; set; }
+    [Parameter] public string? IconCss { get; set; }
+    [Parameter] public string? CloseButtonCss { get; set; }
+    [Parameter] public string? BodyCss { get; set; }
+
+    [Parameter] public EventCallback Closed { get; set; }
+    [Parameter] public RenderFragment<ToastReference>? ChildContent { get; set; }
+
+
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        ToastReference.Closed += Toast_Closed;
+        ToastReference.Refreshing += Toast_Refreshing;
+    }
+
+    void IDisposable.Dispose()
+    {
+        ToastReference.Closed -= Toast_Closed;
+        ToastReference.Refreshing -= Toast_Refreshing;
+    }
+
+    async void Toast_Closed(ToastReference toast)
+    {
+        await InvokeAsync(() =>
+        {
+            Closed.InvokeAsync(toast);
+        });
+    }
+
+
+    async void Toast_Refreshing(ToastReference toastReference)
+    {
+        _shouldRender = true;
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();       
+        });
+    }
+
+
+    bool _shouldRender = false;
+
+    protected override bool ShouldRender()
+    {
+        return _shouldRender;
+    }
+
+}
